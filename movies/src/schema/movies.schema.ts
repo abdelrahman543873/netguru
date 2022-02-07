@@ -6,6 +6,9 @@ export type MovieDocument = Movie & Document;
 @Schema({ versionKey: false, timestamps: true })
 export class Movie {
   @Prop()
+  InputTitle: string;
+
+  @Prop()
   Title: string;
 
   @Prop()

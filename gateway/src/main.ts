@@ -1,3 +1,4 @@
+import { BaseHttpExceptionFilter } from "./../shared/exception-filter/base-http-exception-filter";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
@@ -22,6 +23,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     })
   );
+  app.useGlobalFilters(new BaseHttpExceptionFilter());
   SwaggerModule.setup("api", app, document);
   await app.listen(4000);
 }

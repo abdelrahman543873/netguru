@@ -1,6 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { MoviesModule } from "./movies.module";
 import { MicroserviceOptions, Transport } from "@nestjs/microservices";
+import { BaseHttpExceptionFilter } from "../shared/exception-filter/base-http-exception-filter";
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     MoviesModule,
@@ -12,6 +13,7 @@ async function bootstrap() {
       },
     }
   );
+  app.useGlobalFilters(new BaseHttpExceptionFilter());
   app.listen();
 }
 bootstrap();

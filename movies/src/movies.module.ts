@@ -6,11 +6,13 @@ import { Movie, MovieSchema } from "./schema/movies.schema";
 import { DataBaseModule } from "../shared/database/database.module";
 import { MoviesService } from "./movies.service";
 import { MoviesRepository } from "./movies.repository";
+import { HttpModule } from "@nestjs/axios";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     DataBaseModule,
+    HttpModule.register({}),
     MongooseModule.forFeature([{ name: Movie.name, schema: MovieSchema }]),
   ],
   controllers: [MoviesController],
