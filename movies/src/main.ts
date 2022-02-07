@@ -6,6 +6,7 @@ async function bootstrap() {
     MoviesModule,
     {
       transport: Transport.TCP,
+      options: { port: 2000 },
     }
   );
   app.listen();

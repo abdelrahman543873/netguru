@@ -1,13 +1,24 @@
 version: "3.2"
 services:
-  movies:
-    build: ./movies
+  gateway:
+    build: ./gateway
     restart: always
-    hostname: task
     env_file:
       - .env
     depends_on:
       - app
+      - movies
+    ports:
+      - "4000:4000"
+  movies:
+    build: ./movies
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - movies-mongo
+    ports:
+      - "2000:2000"
   app:
     command: node auth/src/server.js
     env_file:
@@ -20,3 +31,5 @@ services:
         target: 3000
     volumes:
       - .:/app/
+  movies-mongo:
+    image: "mongo"

@@ -10,6 +10,7 @@ async function bootstrap() {
     .setDescription("NetGuru task requirements")
     .setVersion("1.0")
     .addTag("movies", "movies routes")
+    .addTag("auth", "authentication route")
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, options);
@@ -22,6 +23,6 @@ async function bootstrap() {
     })
   );
   SwaggerModule.setup("api", app, document);
-  await app.listen(3000);
+  await app.listen(4000);
 }
 bootstrap();
