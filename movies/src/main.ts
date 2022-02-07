@@ -6,7 +6,10 @@ async function bootstrap() {
     MoviesModule,
     {
       transport: Transport.TCP,
-      options: { port: 2000 },
+      options: {
+        port: 2000,
+        host: process.env.DOCKER_MOVIES_HOST || process.env.MOVIES_HOST,
+      },
     }
   );
   app.listen();

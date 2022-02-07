@@ -10,9 +10,13 @@ export class AuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<RequestContext>();
     const token = getAuthToken(request.headers);
-    console.log(token);
     if (!token) throw new BaseHttpException("EN", 600);
-    const userPayload = <TokenPayload>jwt.verify(token, process.env.JWT_SECRET);
+    let userPayload;
+    try {
+      userPayload = <TokenPayload>jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      throw new BaseHttpException("EN", 401, error.message);
+    }
     if (!userPayload) throw new BaseHttpException("EN", 600);
     request.currentUser = userPayload;
     return true;

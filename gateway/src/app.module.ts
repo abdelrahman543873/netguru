@@ -13,7 +13,7 @@ import { ConfigModule } from "@nestjs/config";
         transport: Transport.TCP,
         options: {
           port: 2000,
-          host: "movies",
+          host: process.env.DOCKER_MOVIES_HOST || process.env.MOVIES_HOST,
         },
       },
     ]),

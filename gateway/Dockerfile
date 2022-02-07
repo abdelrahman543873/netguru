@@ -6,4 +6,6 @@ RUN yarn
 
 COPY . .
 
+ENV DOCKER_MOVIES_HOST=movies
+
 CMD [ "yarn", "start" ]

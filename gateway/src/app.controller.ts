@@ -6,6 +6,7 @@ import { AuthInput } from "./inputs/auth.input";
 import { HttpService } from "@nestjs/axios";
 import { firstValueFrom } from "rxjs";
 import { AuthGuard } from "../shared/guards/auth.guard";
+import { BaseHttpException } from "../shared/exceptions/base-http-exception";
 
 @Controller()
 export class AppController {
@@ -25,8 +26,14 @@ export class AppController {
   @ApiTags("auth")
   @Post("auth")
   async auth(@Body() input: AuthInput): Promise<any> {
-    return (
-      await firstValueFrom(this.httpService.post("http://app:3000/auth", input))
-    ).data;
+    try {
+      return (
+        await firstValueFrom(
+          this.httpService.post("http://app:3000/auth", input)
+        )
+      ).data;
+    } catch (error) {
+      throw new BaseHttpException("EN", 400, error.message);
+    }
   }
 }
