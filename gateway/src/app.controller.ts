@@ -8,7 +8,7 @@ export class AppController {
   constructor(@Inject("MOVIES") private readonly moviesService: ClientProxy) {}
 
   @ApiBearerAuth()
-  @ApiTags("Information")
+  @ApiTags("movies")
   @Post("movies")
   async addMovie(@Body() input: AddMovieInput) {
     return await this.moviesService.send("add-movie", input);
