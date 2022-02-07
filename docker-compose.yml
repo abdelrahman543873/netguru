@@ -1,0 +1,14 @@
+version: "3.2"
+services:
+  app:
+    command: node auth/src/server.js
+    env_file:
+      - .env
+    build:
+      context: ./auth
+      dockerfile: Dockerfile
+    ports:
+      - published: ${APP_PORT:-3000}
+        target: 3000
+    volumes:
+      - .:/app/
