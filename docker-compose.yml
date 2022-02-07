@@ -1,5 +1,13 @@
 version: "3.2"
 services:
+  movies:
+    build: ./movies
+    restart: always
+    hostname: task
+    env_file:
+      - .env
+    depends_on:
+      - app
   app:
     command: node auth/src/server.js
     env_file:
