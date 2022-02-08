@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { AddMovieInput } from "./inputs/add-movie.input";
@@ -6,7 +6,6 @@ import { Movie, MovieDocument } from "./schema/movies.schema";
 import { BaseRepository } from "../shared/generics/repository.abstract";
 import { HttpService } from "@nestjs/axios";
 import { firstValueFrom } from "rxjs";
-import { BaseHttpException } from "../shared/exceptions/base-http-exception";
 @Injectable()
 export class MoviesRepository extends BaseRepository<Movie> {
   constructor(
@@ -28,7 +27,7 @@ export class MoviesRepository extends BaseRepository<Movie> {
         )
       ).data;
     } catch (error) {
-      throw new BaseHttpException("EN", 400, error.message);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
     return await this.movieSchema.create({
       userId,

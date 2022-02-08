@@ -1,8 +1,8 @@
-import { BaseHttpException } from "./../shared/exceptions/base-http-exception";
 import { Injectable } from "@nestjs/common";
 import { AddMovieInput } from "./inputs/add-movie.input";
 import { MoviesRepository } from "./movies.repository";
 import { TokenPayload } from "./../shared/interfaces/token.interface";
+import { RpcException } from "@nestjs/microservices";
 
 @Injectable()
 export class MoviesService {
@@ -14,7 +14,7 @@ export class MoviesService {
         input.currentUser.userId
       );
     if (userMoviesCount === 5 && input.currentUser.role === "basic")
-      throw new BaseHttpException("EN", 601);
+      throw new RpcException("you exceeded the usage of your role");
     return await this.moviesRepository.addMovie(
       input,
       input.currentUser.userId

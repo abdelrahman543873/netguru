@@ -1,4 +1,3 @@
-import { BaseHttpExceptionFilter } from "./../shared/exception-filter/base-http-exception-filter";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";

@@ -1,5 +1,14 @@
 import { RequestContext } from "./../shared/interfaces/request.interface";
-import { Body, Controller, Get, Inject, Post, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  UseGuards,
+  HttpException,
+  HttpStatus,
+} from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AddMovieInput } from "./inputs/add-movie.input";
@@ -7,7 +16,6 @@ import { AuthInput } from "./inputs/auth.input";
 import { HttpService } from "@nestjs/axios";
 import { firstValueFrom } from "rxjs";
 import { AuthGuard } from "../shared/guards/auth.guard";
-import { BaseHttpException } from "../shared/exceptions/base-http-exception";
 import { REQUEST } from "@nestjs/core";
 
 @Controller()
@@ -28,7 +36,9 @@ export class AppController {
         ...input,
         currentUser: this.request.currentUser,
       })
-    );
+    ).catch((error) => {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    });
   }
 
   @ApiBearerAuth()
@@ -56,7 +66,7 @@ export class AppController {
         )
       ).data;
     } catch (error) {
-      throw new BaseHttpException("EN", 400, error.message);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 }
