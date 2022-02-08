@@ -1,5 +1,5 @@
 import { RequestContext } from "./../shared/interfaces/request.interface";
-import { Body, Controller, Inject, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Inject, Post, UseGuards } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AddMovieInput } from "./inputs/add-movie.input";
@@ -26,6 +26,16 @@ export class AppController {
     return await this.moviesService.send("add-movie", {
       ...input,
       currentUser: this.request.currentUser,
+    });
+  }
+
+  @ApiBearerAuth()
+  @ApiTags("movies")
+  @UseGuards(AuthGuard)
+  @Get("movies")
+  async getMovies() {
+    return await this.moviesService.send("get-movies", {
+      ...this.request.currentUser,
     });
   }
 

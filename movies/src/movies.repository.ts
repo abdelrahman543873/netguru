@@ -54,4 +54,8 @@ export class MoviesRepository extends BaseRepository<Movie> {
       })
       .count();
   }
+
+  async getMovies(userId: number) {
+    return await this.movieSchema.find({ userId });
+  }
 }
