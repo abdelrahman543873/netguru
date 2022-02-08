@@ -3,7 +3,6 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import { Test } from "@nestjs/testing";
 import { AppModule } from "../src/app.module";
 import { ValidationPipe } from "@nestjs/common";
-import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 
 const mongod = new MongoMemoryServer({ binary: { version: "4.2.8" } });
 module.exports = async (): Promise<void> => {
@@ -28,14 +27,6 @@ module.exports = async (): Promise<void> => {
       forbidNonWhitelisted: true,
     })
   );
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.TCP,
-    options: {
-      port: 2000,
-    },
-  });
-
-  // await app.startAllMicroservices();
   await app.init();
   global.app = app;
 };
