@@ -1,3 +1,4 @@
+import { RequestContext } from "./../shared/interfaces/request.interface";
 import { Body, Controller, Inject, Post, UseGuards } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
@@ -7,12 +8,14 @@ import { HttpService } from "@nestjs/axios";
 import { firstValueFrom } from "rxjs";
 import { AuthGuard } from "../shared/guards/auth.guard";
 import { BaseHttpException } from "../shared/exceptions/base-http-exception";
+import { REQUEST } from "@nestjs/core";
 
 @Controller()
 export class AppController {
   constructor(
     @Inject("MOVIES") private readonly moviesService: ClientProxy,
-    private httpService: HttpService
+    private httpService: HttpService,
+    @Inject(REQUEST) private readonly request: RequestContext
   ) {}
 
   @ApiBearerAuth()
@@ -20,7 +23,10 @@ export class AppController {
   @UseGuards(AuthGuard)
   @Post("movies")
   async addMovie(@Body() input: AddMovieInput) {
-    return await this.moviesService.send("add-movie", input);
+    return await this.moviesService.send("add-movie", {
+      ...input,
+      currentUser: this.request.currentUser,
+    });
   }
 
   @ApiTags("auth")

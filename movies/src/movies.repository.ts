@@ -17,7 +17,7 @@ export class MoviesRepository extends BaseRepository<Movie> {
     super(movieSchema);
   }
 
-  async addMovie(input: AddMovieInput) {
+  async addMovie(input: AddMovieInput, userId: number) {
     let movieDetails;
     try {
       movieDetails = (
@@ -31,11 +31,27 @@ export class MoviesRepository extends BaseRepository<Movie> {
       throw new BaseHttpException("EN", 400, error.message);
     }
     return await this.movieSchema.create({
+      userId,
       InputTitle: input.Title,
       Title: movieDetails.Title,
       Released: movieDetails.Released,
       Genre: movieDetails.Genre,
       Director: movieDetails.Director,
     });
+  }
+
+  async checkUserMoviesCountDuringMonth(userId: number) {
+    const currentDate = new Date();
+    const earlierMonthDate = new Date();
+    earlierMonthDate.setMonth(earlierMonthDate.getMonth() - 1);
+    return await this.movieSchema
+      .find({
+        userId,
+        created_at: {
+          $gte: currentDate.toISOString(),
+          $lt: earlierMonthDate.toISOString(),
+        },
+      })
+      .count();
   }
 }

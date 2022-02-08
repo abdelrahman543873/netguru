@@ -1,3 +1,4 @@
+import { BaseHttpException } from "./../shared/exceptions/base-http-exception";
 import { Injectable } from "@nestjs/common";
 import { AddMovieInput } from "./inputs/add-movie.input";
 import { MoviesRepository } from "./movies.repository";
@@ -7,6 +8,15 @@ export class MoviesService {
   constructor(private moviesRepository: MoviesRepository) {}
 
   async addMovie(input: AddMovieInput) {
-    return await this.moviesRepository.addMovie(input);
+    const userMoviesCount =
+      await this.moviesRepository.checkUserMoviesCountDuringMonth(
+        input.currentUser.userId
+      );
+    if (userMoviesCount === 5 && input.currentUser.role === "basic")
+      throw new BaseHttpException("EN", 601);
+    return await this.moviesRepository.addMovie(
+      input,
+      input.currentUser.userId
+    );
   }
 }
