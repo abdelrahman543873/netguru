@@ -3,7 +3,6 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 import { Test } from "@nestjs/testing";
 import { AppModule } from "../src/app.module";
 import { ValidationPipe } from "@nestjs/common";
-import { AuthGuard } from "../shared/guards/auth.guard";
 import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 
 const mongod = new MongoMemoryServer({ binary: { version: "4.2.8" } });
@@ -19,10 +18,7 @@ module.exports = async (): Promise<void> => {
   global.mongoDBName = mongoConfig.mongoDBName;
   const module = await Test.createTestingModule({
     imports: [AppModule],
-  })
-    .overrideGuard(AuthGuard)
-    .useValue({ canActivate: () => true })
-    .compile();
+  }).compile();
 
   const app = module.createNestApplication();
   app.useGlobalPipes(
@@ -34,10 +30,12 @@ module.exports = async (): Promise<void> => {
   );
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
-    options: { port: 2000 },
+    options: {
+      port: 2000,
+    },
   });
 
+  // await app.startAllMicroservices();
   await app.init();
-  await app.startAllMicroservices();
   global.app = app;
 };

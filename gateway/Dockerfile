@@ -8,4 +8,6 @@ COPY . .
 
 ENV DOCKER_MOVIES_HOST=movies
 
+ENV DOCKER_HOST=movies
+
 CMD [ "yarn", "start" ]

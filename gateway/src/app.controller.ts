@@ -13,9 +13,9 @@ import { REQUEST } from "@nestjs/core";
 @Controller()
 export class AppController {
   constructor(
-    @Inject("MOVIES") private readonly moviesService: ClientProxy,
     private httpService: HttpService,
-    @Inject(REQUEST) private readonly request: RequestContext
+    @Inject(REQUEST) private readonly request: RequestContext,
+    @Inject("MOVIES") private readonly moviesService: ClientProxy
   ) {}
 
   @ApiBearerAuth()
@@ -23,10 +23,12 @@ export class AppController {
   @UseGuards(AuthGuard)
   @Post("movies")
   async addMovie(@Body() input: AddMovieInput) {
-    return await this.moviesService.send("add-movie", {
-      ...input,
-      currentUser: this.request.currentUser,
-    });
+    return await firstValueFrom(
+      this.moviesService.send("add-movie", {
+        ...input,
+        currentUser: this.request.currentUser,
+      })
+    );
   }
 
   @ApiBearerAuth()
@@ -34,9 +36,11 @@ export class AppController {
   @UseGuards(AuthGuard)
   @Get("movies")
   async getMovies() {
-    return await this.moviesService.send("get-movies", {
-      ...this.request.currentUser,
-    });
+    return await firstValueFrom(
+      this.moviesService.send("get-movies", {
+        ...this.request.currentUser,
+      })
+    );
   }
 
   @ApiTags("auth")
@@ -45,7 +49,10 @@ export class AppController {
     try {
       return (
         await firstValueFrom(
-          this.httpService.post("http://app:3000/auth", input)
+          this.httpService.post(
+            `http://${process.env.DOCKER_HOST || process.env.HOST}:3000/auth`,
+            input
+          )
         )
       ).data;
     } catch (error) {
