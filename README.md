@@ -46,3 +46,4 @@ yarn start // starts the micro-service
   ```bash
  docker-compose up 
 ```
+and then go to localhost:4000/api
