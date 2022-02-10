@@ -14,7 +14,6 @@ import { existsSync, readFileSync } from "fs";
             (existsSync("globalConfig.json") &&
               JSON.parse(readFileSync("globalConfig.json", "utf-8"))
                 .mongoUri) ||
-            configService.get<string>("MONGO_DB") ||
             configService.get<string>(ENV_VARIABLE_NAMES.LOCAL_MONGO_DB),
         };
       },
