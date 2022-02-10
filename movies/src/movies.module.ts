@@ -7,6 +7,7 @@ import { DataBaseModule } from "../shared/database/database.module";
 import { MoviesService } from "./movies.service";
 import { MoviesRepository } from "./movies.repository";
 import { HttpModule } from "@nestjs/axios";
+import { BasicSub } from "../shared/validators/basic-subscription.validator";
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { HttpModule } from "@nestjs/axios";
     MongooseModule.forFeature([{ name: Movie.name, schema: MovieSchema }]),
   ],
   controllers: [MoviesController],
-  providers: [MoviesRepository, MoviesService],
+  providers: [MoviesRepository, MoviesService, BasicSub],
 })
 export class MoviesModule {}
