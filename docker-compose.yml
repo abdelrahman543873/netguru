@@ -4,7 +4,7 @@ services:
     build: ./gateway
     restart: always
     env_file:
-      - .env
+      - ./gateway/.env
     depends_on:
       - app
       - movies
@@ -14,7 +14,7 @@ services:
     build: ./movies
     restart: always
     env_file:
-      - .env
+      - ./movies/.env
     depends_on:
       - movies-mongo
     ports:
@@ -22,7 +22,7 @@ services:
   app:
     command: node auth/src/server.js
     env_file:
-      - .env
+      - ./auth/.env
     build:
       context: ./auth
       dockerfile: Dockerfile
