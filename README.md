@@ -40,3 +40,9 @@ yarn start // starts the micro-service
  ```bash
  yarn test
 ```
+
+## Dockerization
+ the app is fully dockerized you can run the whole app using 
+  ```bash
+ docker-compose up 
+```
