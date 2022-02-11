@@ -33,7 +33,7 @@ node server.js
 
 ## Movies Service
 
-this service uses tcp for internal communication between it and the gateway which is the is the definition of micro-services in nestjs , where micro-services are any services that use any other protocol that http to run the service navigate into movies micro-service folder and run the following commands
+this service uses tcp for internal communication between it and the gateway which is the is the definition of micro-services in nestjs , where micro-services are any services that use any other protocol than http to run the service navigate into movies micro-service folder and run the following commands
 
 ```bash
 yarn // installs all the packages
