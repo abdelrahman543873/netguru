@@ -15,7 +15,7 @@ describe("get movies suite case", () => {
     });
     const params = buildMovieParams();
     const res = await testRequest({
-      method: HTTP_METHODS_ENUM.GET,
+      method: HTTP_METHODS_ENUM.POST,
       url: ADD_MOVIES,
       variables: {
         Title: params.Title,
